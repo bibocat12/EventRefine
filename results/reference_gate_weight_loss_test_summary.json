@@ -1,0 +1,20 @@
+{
+  "family": "reference_gate_weight_loss_v1",
+  "split": "test",
+  "uses_test": true,
+  "rows": 15,
+  "expected_rows": 15,
+  "seeds": [37, 1337, 2024],
+  "test_clips": 24,
+  "test_events_per_row": 2074586,
+  "source_sha": "8803f978fde1dc266d222fe3d57dd48ed6c8c6f1",
+  "test_source_sha": "cb7c6211ed27b00ac5a1a540065463ca4525b3e6",
+  "config_sha256": "1d9dac62a6139302770499fcbb2adc881d82441b21e2052530df6f5ef58de17a",
+  "groups": {
+    "reference_gated": {"iou_mean": 88.18636933962505, "iou_sample_sd": 0.22769045426576356, "segacc_mean": 92.51333872477214, "pd_mean": 98.15774484812833, "fa10k_mean": 0.06343496387074177},
+    "uniform": {"iou_mean": 86.37306094169617, "iou_sample_sd": 0.27757460620604907, "segacc_mean": 90.71566263834636, "pd_mean": 97.81693231369692, "fa10k_mean": 0.06860174765117412},
+    "observed_only": {"iou_mean": 88.23214173316956, "iou_sample_sd": 0.4418954959058592, "segacc_mean": 92.21644997596741, "pd_mean": 97.96212779069442, "fa10k_mean": 0.05990084394385643},
+    "global_reference": {"iou_mean": 88.32351565361023, "iou_sample_sd": 0.2085304592166921, "segacc_mean": 92.55441824595134, "pd_mean": 98.15354304975862, "fa10k_mean": 0.06261863194396824},
+    "classification_only": {"iou_mean": 84.93890762329102, "iou_sample_sd": 0.6614093553959712, "segacc_mean": 87.70055174827576, "pd_mean": 96.93782272145812, "fa10k_mean": 0.040707088397279205}
+  }
+}

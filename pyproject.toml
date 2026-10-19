@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eventrefine"
+version = "0.1.0"
+description = "Global-reference graph refinement for EV-UAV event-wise segmentation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Le Gia Phuc" }]
+dependencies = [
+  "numpy>=1.24",
+  "PyYAML>=6.0",
+  "torch>=2.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+eventrefine-train = "eventrefine.cli.train:main"
+eventrefine-evaluate = "eventrefine.cli.evaluate:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eventrefine"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]

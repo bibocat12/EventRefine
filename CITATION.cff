@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use EventRefine, please cite the accompanying paper."
+title: "EventRefine: Global Reference Graph Refinement for Tiny UAV Segmentation"
+authors:
+  - family-names: Phuc
+    given-names: "Le Gia"
+version: 0.1.0
+date-released: 2026-10-19
+license: MIT
+repository-code: "https://github.com/bibocat12/EventRefine"

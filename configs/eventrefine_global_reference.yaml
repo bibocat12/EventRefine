@@ -1,0 +1,31 @@
+project: EventRefine
+version: 1
+model:
+  c_stem: 64
+  c_graph: 16
+  k: 8
+  encoder: sensor
+  encoder_context: local_attention
+  graph_operator: clipped_global
+  refinement_mode: feature_graph
+  threshold: 0.90
+  window_duration_ms: 1000.0
+  tau_scale: 64.0
+  n_blocks: 32
+  image_width: 346
+  image_height: 260
+training:
+  objective: final_ce_plus_shifted_lovasz
+  final_ce_weight: 1.0
+  lovasz_weight: 0.15
+  threshold_logit_shift: 2.1972245773362196
+  checkpoint_selection: max_val_iou_at_0.90
+  optimizer: AdamW
+  learning_rate: 0.0002
+  weight_decay: 0.01
+  epochs: 120
+  seeds: [37, 1337, 2024]
+paths:
+  data_root_env: EV_UAV_DATA_ROOT
+  normalization_env: EVENTREFINE_NORMALIZATION
+  output_root_env: EVENTREFINE_OUTPUT
