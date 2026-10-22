@@ -1,14 +1,5 @@
 # EventRefine
 
-Global-reference graph refinement for event-wise tiny-UAV segmentation on EV-UAV.
-
-EventRefine is a compact event segmentation model that combines Morton-ordered local attention with a fixed candidate graph. A learned relation score is compared with one shared reference score computed over the candidate slots in the current input:
-
-\[
-w_{ij}=\max(a_{ij}-\bar b,0).
-\]
-
-The weighted signed feature difference is normalized and added before the final event classifier. The released model fixes the architecture to the paper-facing global-reference configuration; ablation switches are not exposed through the public model API.
 
 ## Repository layout
 
