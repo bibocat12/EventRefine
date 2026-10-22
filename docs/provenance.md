@@ -36,4 +36,5 @@ The paper's verified reference-gate family contains five arms × three seeds. Th
 
 ## External evaluator
 
-The official EV-UAV evaluator is not redistributed. The upstream reference repository is documented in `THIRD_PARTY.md`; its inspected snapshot did not provide a clear license file. Supply an evaluator checkout separately and follow its license. The default evaluator command reports direct event metrics and writes a receipt; it does not silently import an external evaluator.
+The official EV-UAV evaluator is not redistributed. The upstream reference repository is documented in `THIRD_PARTY.md`; its inspected snapshot did not provide a clear license file. Supply a trusted evaluator checkout separately and follow its license. Without an evaluator argument, the command reports direct event metrics only. With `--official-evaluator-root`, it executes that checkout's `roc_update` and `cal_roc` methods on whole-clip predictions and records its source hash, parameters, counters, and Pd/Fa outputs. The adapter preserves upstream timestamps and interval semantics.
+

@@ -80,13 +80,15 @@ class EventRefineModel(nn.Module):
             * backbone.NY_FINE
             + (batch["y"] / backbone.S_FINE).long().clamp(0, backbone.NY_FINE - 1)
         )
-        polarity = batch["feat_point"][:, 3]
+        # Channel 3 is standardized log1p(time since the preceding event of
+        # opposite polarity at the same pixel), not the raw polarity channel.
+        reference_descriptor = batch["feat_point"][:, 3]
         refined, observed, reference, neighbor_idx = self.cc_mar(
             h_in,
             cell_ids,
             xy,
             batch["tau_raw"],
-            polarity,
+            reference_descriptor,
         )
         final_logits = self.base.head(torch.cat([h0_point, refined], dim=1))
         stats = {
@@ -107,3 +109,4 @@ class EventRefineModel(nn.Module):
 
 
 __all__ = ["EventRefineModel"]
+

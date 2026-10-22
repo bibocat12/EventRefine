@@ -11,8 +11,9 @@ import yaml
 from .config import validate_config
 from .dataset import EvUAV
 from .losses import eventrefine_loss
+from .metrics import confusion, summarize
 from .model import EventRefineModel
-from .runtime import confusion, make_context, metrics, prepare_window
+from .runtime import make_context, prepare_window
 
 ARM_NAME = "eventrefine_global_reference"
 
@@ -49,8 +50,8 @@ def evaluate_val(model: EventRefineModel, dataset: EvUAV, *, mean: np.ndarray, s
                 raise RuntimeError("validation did not produce one finite prediction per event")
             observed = confusion(probabilities, np.asarray(context.clip["seg"], dtype=np.int64))
             _add_counts(total, observed)
-            per_clip.append({"clip": context.clip["name"], "metrics": metrics(observed)})
-    return {"metrics": metrics(total), "clips": len(per_clip), "events": total["events"], "per_clip": per_clip, "split": "val", "uses_test": False}
+            per_clip.append({"clip": context.clip["name"], "metrics": summarize(observed)})
+    return {"metrics": summarize(total), "clips": len(per_clip), "events": total["events"], "per_clip": per_clip, "split": "val", "uses_test": False}
 
 
 def train_one(*, config_path: Path, data_root: Path, normalization_path: Path, output_root: Path, seed: int, epochs: int | None = None, device: str = "cpu") -> dict[str, Any]:
@@ -104,3 +105,4 @@ def train_one(*, config_path: Path, data_root: Path, normalization_path: Path, o
 
 
 __all__ = ["ARM_NAME", "evaluate_val", "load_normalization", "train_one"]
+

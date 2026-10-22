@@ -50,7 +50,11 @@ class ContextCalibratedAffinityRefinement(nn.Module):
         nn.init.zeros_(self.up.weight)
 
     def get_neighbors(self, cell_ids: torch.Tensor, n: int, device: torch.device) -> torch.Tensor:
-        """Return fixed local-order candidate slots with deterministic ties."""
+        """Return eight slots in stable spatial-cell order.
+
+        Boundary indices are clamped, so duplicates and self-edges are
+        intentional. Slots are not filtered by distance or cell membership.
+        """
         order = torch.argsort(cell_ids, stable=True)
         inverse = torch.empty_like(order)
         inverse[order] = torch.arange(n, device=device)
@@ -66,12 +70,12 @@ class ContextCalibratedAffinityRefinement(nn.Module):
         cell_ids: torch.Tensor,
         xy: torch.Tensor,
         t: torch.Tensor,
-        polarity: torch.Tensor,
+        reference_descriptor: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         if h.ndim != 2 or xy.shape != (h.shape[0], 2) or t.shape != (h.shape[0],):
             raise ValueError("graph inputs are not aligned")
-        if cell_ids.shape != (h.shape[0],) or polarity.shape != (h.shape[0],):
-            raise ValueError("graph cell/polarity inputs are not aligned")
+        if cell_ids.shape != (h.shape[0],) or reference_descriptor.shape != (h.shape[0],):
+            raise ValueError("graph cell/reference inputs are not aligned")
         n = int(h.shape[0])
         if n == 0:
             empty = h.new_empty((0, self.k))
@@ -88,11 +92,12 @@ class ContextCalibratedAffinityRefinement(nn.Module):
         distance = ((xy_j - xy_i).norm(dim=-1, keepdim=True) / 50.0).clamp(0.0, 5.0)
         dt_norm = (dt.abs() / 50.0).clamp(0.0, 5.0)
         geometry = torch.cat([distance, dt_norm], dim=-1)
-        polarity_agreement = (
-            polarity.unsqueeze(1).unsqueeze(-1) * polarity[neighbor_idx].unsqueeze(-1)
+        descriptor_product = (
+            reference_descriptor.unsqueeze(1).unsqueeze(-1)
+            * reference_descriptor[neighbor_idx].unsqueeze(-1)
         )
         observed_input = torch.cat([(z_i - z_j).abs(), z_i * z_j, geometry], dim=-1)
-        reference_input = torch.cat([geometry, polarity_agreement], dim=-1)
+        reference_input = torch.cat([geometry, descriptor_product], dim=-1)
 
         device_type = h.device.type
         with torch.autocast(
@@ -102,6 +107,7 @@ class ContextCalibratedAffinityRefinement(nn.Module):
         ):
             observed = torch.sigmoid(self.aff_mlp(observed_input))
             reference = torch.sigmoid(self.ref_mlp(reference_input))
+            # Average all N*8 slots, including boundary duplicates/self-edges.
             shared_reference = reference.mean(dim=(0, 1), keepdim=True).expand_as(reference)
             weights = F.relu(observed - shared_reference)
             coefficient = weights.to(dtype=z.dtype)
@@ -113,3 +119,4 @@ class ContextCalibratedAffinityRefinement(nn.Module):
 
 
 __all__ = ["ContextCalibratedAffinityRefinement"]
+
