@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+.env
+.env.*
+*.egg-info/
+
+# Local dataset, normalizers, checkpoints, and run outputs
+data/
+checkpoints/
+outputs/
+runs/
+*.pt
+*.pth
+*.ckpt
+*.npz
+*.npy
+*.onnx
+
+# Logs and local machine metadata
+*.log
+*.out
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,34 @@
+{
+  "status": "COMPLETED",
+  "method": "EventRefine pair-reference",
+  "arm": "k8_pair_reference_fullclip8s",
+  "split": "test",
+  "uses_test": true,
+  "window_duration_ms": 8000.0,
+  "checkpoint_selection": "max_val_iou_at_0.90",
+  "seeds": [37, 1337, 2024],
+  "clips_per_seed": 24,
+  "events_per_seed": 2074586,
+  "objective": "final_ce_plus_shifted_lovasz",
+  "lovasz_weight": 0.15,
+  "metrics": {
+    "IoU_percent": {"mean": 88.13425052686654, "sample_sd": 0.4182101380437409},
+    "ACC_percent_foreground_event_recall": {"mean": 92.1249550697644, "sample_sd": 0.3544269112404125},
+    "Precision_percent": {"mean": 95.31707549058967, "sample_sd": 0.5885788777052244},
+    "Pd_percent": {"mean": 94.28079571537873, "sample_sd": 0.38398737375448905},
+    "Fa_x1e4": {"mean": 0.05689435318915398, "sample_sd": 0.0028968288617813396}
+  },
+  "per_seed": {
+    "37": {"IoU_percent": 88.5959369159821, "ACC_percent_foreground_event_recall": 92.28086882238436, "Precision_percent": 95.68721411457199, "Pd_percent": 94.45294567712318, "Fa_x1e4": 0.05737220602433848},
+    "1337": {"IoU_percent": 87.7807942084531, "ACC_percent_foreground_event_recall": 92.37469715854188, "Precision_percent": 94.63837357781317, "Pd_percent": 94.54858454475898, "Fa_x1e4": 0.059522543782668705},
+    "2024": {"IoU_percent": 88.0260204561644, "ACC_percent_foreground_event_recall": 91.71929922836696, "Precision_percent": 95.62563877938385, "Pd_percent": 93.84085692425401, "Fa_x1e4": 0.05378830976045476}
+  },
+  "provenance": {
+    "source_family": "EventRefine full-clip 8s k-sensitivity TEST",
+    "official_evaluator": "EV-UAV-clean",
+    "official_evaluator_settings": {"threshold": 0.9, "interval_ms": 50.0, "correct_threshold": 0.0001},
+    "artifact_source": "/home/test/EventRefine_full_k_official_test_v1/campaign_status.json",
+    "val_parity": "PASSED for all three seeds",
+    "note": "ACC is official foreground-event recall TP/(TP+FN), not overall event accuracy."
+  }
+}
